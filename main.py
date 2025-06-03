@@ -1,5 +1,6 @@
 import os
 from extractor.text_extractor import extract_text, UnsupportedFileTypeError
+from analyzer.text_analyzer import TextAnalyzer
 
 
 def print_header():
@@ -32,8 +33,17 @@ def main():
         print(text[:500].strip())  # First 500 characters
         print("-" * 60)
 
-        # Placeholder for next step
-        print("\n🚧 Analysis module coming up next...")
+        print("\n🔎 Analyzing text...\n")
+        analyzer = TextAnalyzer()
+        analysis = analyzer.analyze(text)
+
+        print("📝 Summary:")
+        print(analysis['summary'])
+        print("\n🔑 Key Phrases:")
+        print(", ".join(analysis['key_phrases']))
+        print("\n🧩 Named Entities:")
+        for ent in analysis['named_entities']:
+            print(f" - {ent['text']} [{ent['label']}]")
 
     except FileNotFoundError as fnf:
         print(str(fnf))
