@@ -57,5 +57,266 @@
       "Tungi",
       "Mjimwema"
     ]
+  },
+
+  "Mbeya": {
+    "Mbeya Urban": [
+      "Forest",
+      "Iyela",
+      "Kisutu",
+      "Loleza",
+      "Nsalaga",
+      "Sisimba",
+      "Tembela",
+      "Ubungo",
+      "Ruanda",
+      "Maendeleo"
+    ],
+    "Mbeya Rural": [
+      "Mbalizi",
+      "Tukuyu",
+      "Iganjo",
+      "Ileya",
+      "Ulenje",
+      "Santilya",
+      "Tukuyu"
+    ],
+    "Rungwe": [
+      "Ilonga",
+      "Bukandwe",
+      "Kasyululu",
+      "Lufilyo",
+      "Kiwira",
+      "Mpuguso",
+      "Kasanga",
+      "Ngana"
+    ]
+  },
+
+  "Dodoma": {
+    "Dodoma Urban": [
+      "Chihanga",
+      "Hombolo",
+      "Ipemba",
+      "Kizota",
+      "Majeleko",
+      "Makole",
+      "Mnadani",
+      "Nzuguni",
+      "Sabasaba",
+      "Ubungo"
+    ],
+    "Kongwa": [
+      "Chang'ombe",
+      "Kibaigwa",
+      "Kindimba",
+      "Kipanga",
+      "Mkoka",
+      "Mpwayungu",
+      "Nala",
+      "Nkuhungu"
+    ],
+    "Bahi": [
+      "Chali",
+      "Chibelela",
+      "Idifu",
+      "Ibugule",
+      "Itiso",
+      "Iwejele",
+      "Mpalanga",
+      "Mpwayungu"
+    ]
+  },
+
+  "Arusha": {
+    "Arusha Urban": [
+      "Kaloleni",
+      "Kati",
+      "Levolosi",
+      "Lemara",
+      "Olorien",
+      "Sekei"
+    ],
+    "Arumeru": [
+      "King'ori",
+      "Kijenge",
+      "Makiba",
+      "Moshono",
+      "Nduruma",
+      "Oldonyosambu",
+      "Sombetini"
+    ],
+    "Longido": [
+      "Elang'ata Dapash",
+      "Kimokouwa",
+      "Lolkisale",
+      "Matale",
+      "Molale",
+      "Kimnyaki"
+    ]
+  },
+
+  "Mwanza": {
+    "Ilemela": [
+      "Bugogwa",
+      "Buswelu",
+      "Bwiru",
+      "Kitangiri",
+      "Nyakato",
+      "Sengerema"
+    ],
+    "Nyamagana": [
+      "Igoma",
+      "Isamilo",
+      "Kahama",
+      "Mkolani",
+      "Mwakibete",
+      "Nyamagana"
+    ],
+    "Sengerema": [
+      "Bujashi",
+      "Busisi",
+      "Ilanzi",
+      "Lutale",
+      "Mwalukonge",
+      "Shibula"
+    ]
+  },
+
+  "Shinyanga": {
+    "Shinyanga Urban": [
+      "Ndembezi",
+      "Mkumbara",
+      "Nyaluhande",
+      "Chibe",
+      "Ibadakuli"
+    ],
+    "Kahama": [
+      "Bugelenga",
+      "Isagehe",
+      "Kilago",
+      "Mnywanza",
+      "Ruhunga"
+    ],
+    "Kahama Rural": [
+      "Busangi",
+      "Imalaseko",
+      "Ishingila",
+      "Lutale",
+      "Mwakitolyo"
+    ]
+  },
+
+    "Morogoro": {
+    "Morogoro Urban": [
+      "Kichangani",
+      "Kihonda",
+      "Kigurunyembe",
+      "Kihonda",
+      "Kingolwira",
+      "Kilakala",
+      "Mji Mpya",
+      "Mkongoro",
+      "Mlimani",
+      "Sabasaba"
+    ],
+    "Mvomero": [
+      "Mzumbe",
+      "Mgeta",
+      "Chanzuru",
+      "Mvuha",
+      "Mvomero",
+      "Kiroka",
+      "Ngerengere"
+    ],
+    "Kilombero": [
+      "Ifakara",
+      "Mang'ula",
+      "Mngeta",
+      "Mahenge",
+      "Kibaoni",
+      "Luponde"
+    ]
+  },
+
+  "Njombe": {
+    "Njombe Urban": [
+      "Utengule Usangu",
+      "Makambako",
+      "Lwenge",
+      "Idunda",
+      "Matembwe",
+      "Mjimwema",
+      "Ulenge"
+    ],
+    "Wanging'ombe": [
+      "Lupembe",
+      "Makete",
+      "Nkumbi",
+      "Lusanje",
+      "Ilembula",
+      "Ikuna"
+    ],
+    "Makambako": [
+      "Mahongole",
+      "Nyangoto",
+      "Mabanda",
+      "Ulongambi"
+    ],
+    "Njombe Rural": [
+      "Mtwango",
+      "Mowo",
+      "Lwengo",
+      "Kidegembye",
+      "Kidugala",
+      "Idamba",
+      "Ikondo"
+    ]
+  },
+
+  "Iringa": {
+    "Iringa Urban": [
+      "Isoka",
+      "Kihesa",
+      "Mjimwema",
+      "Kitwiru",
+      "Kipengele",
+      "Mkwawa",
+      "Ruaha"
+    ],
+    "Iringa Rural": [
+      "Luhomelo",
+      "Kihorogota",
+      "Isele",
+      "Magozi",
+      "Mapogoro",
+      "Idodi",
+      "Ulanda",
+      "Idunda",
+      "Ilolo Mpya",
+      "Sungwisi",
+      "Mgama",
+      "Mafinga",
+      "Kilolo",
+      "Mafiga",
+      "Lupembe"
+    ],
+    "Kilolo": [
+      "Ibumu",
+      "Ipogolo",
+      "Udekwa",
+      "Magulilwa",
+      "Ulanda",
+      "Makete"
+    ],
+    "Mufindi": [
+      "Sungwisi",
+      "Ikwiriri",
+      "Kihanga",
+      "Ipatagwa",
+      "Mapanda",
+      "Mbalamaziwa"
+    ]
   }
+
 }

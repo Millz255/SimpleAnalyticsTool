@@ -1,19 +1,6 @@
-import os
 from extractor.text_extractor import extract_text, UnsupportedFileTypeError
 from analyzer.text_analyzer import TextAnalyzer
-
-
-def print_header():
-    print("=" * 60)
-    print("🧠  Simple Analytics Tool".center(60))
-    print("=" * 60)
-
-
-def prompt_file_path() -> str:
-    file_path = input("📄 Enter the full path to your document (.txt, .pdf, .docx): ").strip()
-    if not file_path:
-        raise ValueError("⚠️  File path cannot be empty.")
-    return file_path
+from extractor.financial_data_extractor import extract_all_financial_data  # <-- import your extractor
 
 
 def main():
@@ -32,6 +19,14 @@ def main():
         print("-" * 60)
         print(text[:500].strip())  # First 500 characters
         print("-" * 60)
+
+        # Extract structured financial data
+        data = extract_all_financial_data(text)
+
+        if data.get("email") is None:
+            print("⚠️ Email not found; many Tanzanians may not have one.")
+        else:
+            print(f"Email: {data['email']}")
 
         print("\n🔎 Analyzing text...\n")
         analyzer = TextAnalyzer()
@@ -53,7 +48,3 @@ def main():
         print(f"⚠️  {ve}")
     except Exception as e:
         print(f"❌ Unexpected error occurred: {e}")
-
-
-if __name__ == "__main__":
-    main()
