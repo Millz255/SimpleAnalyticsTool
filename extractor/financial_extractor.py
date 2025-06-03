@@ -2,7 +2,6 @@ import re
 import json
 from typing import Optional, Dict, Any
 
-
 with open('app/data/tanzania_locations.json', 'r', encoding='utf-8') as f:
     TANZANIA_LOCATIONS = json.load(f)
 
@@ -108,7 +107,6 @@ def extract_loan_limit(text: str) -> Optional[float]:
     return None
 
 def extract_location(text: str) -> Dict[str, Optional[str]]:
-
     text_lower = text.lower()
 
     for region, districts in TANZANIA_LOCATIONS.items():
@@ -123,11 +121,44 @@ def extract_location(text: str) -> Dict[str, Optional[str]]:
 
     return {"region": None, "district": None, "ward": None}
 
+def extract_job_and_work(text: str) -> Dict[str, Optional[str]]:
+    # Keywords for job titles - extend as needed
+    job_keywords = [
+        "software developer", "engineer", "teacher", "manager", "consultant",
+        "accountant", "driver", "nurse", "farmer", "mechanic", "worker",
+        "job", "work", "developer", "technician", "officer", "supervisor",
+        "assistant", "clerk", "operator", "analyst"
+    ]
+    job_pattern = re.compile(r'\b(' + '|'.join(job_keywords) + r')\b', re.IGNORECASE)
+
+    job_matches = job_pattern.findall(text)
+    job_title = job_matches[0].title() if job_matches else None
+
+    # Patterns to extract workplace/company/organization
+    workplace = None
+    workplace_patterns = [
+        re.compile(r'works at ([A-Z][\w&\s\-]+)', re.IGNORECASE),
+        re.compile(r'employed by ([A-Z][\w&\s\-]+)', re.IGNORECASE),
+        re.compile(r'working at ([A-Z][\w&\s\-]+)', re.IGNORECASE),
+        re.compile(r'employee of ([A-Z][\w&\s\-]+)', re.IGNORECASE),
+    ]
+    for pat in workplace_patterns:
+        m = pat.search(text)
+        if m:
+            workplace = m.group(1).strip()
+            break
+
+    return {
+        "job_title": job_title,
+        "workplace": workplace,
+    }
+
 def extract_all_financial_data(text: str) -> Dict[str, Any]:
     """
-    Extract all relevant financial data from text into a structured dictionary.
+    Extract all relevant financial data from text into a structured dictionary,
+    including job and workplace info.
     """
-    return {
+    data = {
         "full_name": extract_full_name(text),
         "phone_numbers": extract_phone_numbers(text),
         "nida_number": extract_nida_number(text),
@@ -137,3 +168,8 @@ def extract_all_financial_data(text: str) -> Dict[str, Any]:
         "bank_balance_tzs": extract_bank_balance(text),
         "loan_limit_tzs": extract_loan_limit(text),
     }
+
+    job_data = extract_job_and_work(text)
+    data.update(job_data)
+
+    return data

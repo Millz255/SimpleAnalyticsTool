@@ -95,9 +95,12 @@ class TextAnalyzer:
         return summary
 
     def _extract_key_phrases(self, doc) -> List[str]:
-        # Extract top key phrases
         phrases = [phrase.text for phrase in doc._.phrases[: self.key_phrases_count]]
-        return phrases
+        # Add "job" and "work" if they appear in text but missing in phrases
+        for word in ["job", "work"]:
+            if word in doc.text.lower() and word not in [p.lower() for p in phrases]:
+                phrases.append(word)
+        return phrases[: self.key_phrases_count]  # keep limit
 
     def _extract_named_entities(self, doc) -> List[Dict[str, str]]:
         # Extract named entities with their labels

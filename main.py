@@ -14,6 +14,8 @@ def prompt_file_path() -> str:
     file_path = input("📄 Enter the full path to your document (.txt, .pdf, .docx): ").strip()
     if not file_path:
         raise ValueError("⚠️  File path cannot be empty.")
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"⚠️  File not found: {file_path}")
     return file_path
 
 
@@ -69,12 +71,12 @@ def main():
 
         data = extract_all_financial_data(text)
 
-        # If you want to handle email extraction and it's not implemented in extractor,
-        # just note here:
-        if data.get("email") is None:
-            print("\n⚠️ Email not found; many Tanzanians may not have one.")
+        # Handle email if extracted, otherwise notify
+        email = data.get("email")
+        if email:
+            print(f"\n📧 Email: {email}")
         else:
-            print(f"\nEmail: {data['email']}")
+            print("\n⚠️ Email not found; many Tanzanians may not have one.")
 
         display_financial_data(data)
 
@@ -83,12 +85,17 @@ def main():
         analysis = analyzer.analyze(text)
 
         print("📝 Summary:")
-        print(analysis['summary'])
+        print(analysis.get('summary', 'No summary available.'))
         print("\n🔑 Key Phrases:")
-        print(", ".join(analysis['key_phrases']))
+        key_phrases = analysis.get('key_phrases', [])
+        print(", ".join(key_phrases) if key_phrases else "No key phrases found.")
         print("\n🧩 Named Entities:")
-        for ent in analysis['named_entities']:
-            print(f" - {ent['text']} [{ent['label']}]")
+        named_entities = analysis.get('named_entities', [])
+        if named_entities:
+            for ent in named_entities:
+                print(f" - {ent['text']} [{ent['label']}]")
+        else:
+            print("No named entities found.")
 
     except FileNotFoundError as fnf:
         print(str(fnf))
