@@ -1,0 +1,61 @@
+{
+  "Dar es Salaam": {
+    "Ilala": [
+      "Gerezani",
+      "Kariakoo",
+      "Upanga Magharibi",
+      "Upanga Mashariki",
+      "Mchikichini",
+      "Jangwani",
+      "Kitunda",
+      "Kivukoni",
+      "Mchafukoge",
+      "Vingunguti",
+      "Segerea",
+      "Tabata"
+    ],
+    "Kinondoni": [
+      "Msasani",
+      "Mikocheni",
+      "Kinondoni",
+      "Bunju",
+      "Kijitonyama",
+      "Makumbusho",
+      "Kunduchi",
+      "Kibamba",
+      "Kawe",
+      "Mwananyamala",
+      "Magomeni",
+      "Mwananyamala",
+      "Kijichi"
+    ],
+    "Temeke": [
+      "Chang'ombe",
+      "Kurasini",
+      "Mbagala",
+      "Miburani",
+      "Sandali",
+      "Toangoma",
+      "Kijichi",
+      "Temeke",
+      "Mtoni",
+      "Yombo Vituka"
+    ],
+    "Ubungo": [
+      "Kimara",
+      "Makuburi",
+      "Manzese",
+      "Saranga",
+      "Mbezi",
+      "Kigogo",
+      "Mabwepande"
+    ],
+    "Kigamboni": [
+      "Kigamboni",
+      "Kibada",
+      "Toangoma",
+      "Tungi",
+      "Mjimwema"
+    ]
+  }
+}
