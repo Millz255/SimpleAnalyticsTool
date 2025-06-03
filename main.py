@@ -1,6 +1,7 @@
+import os
 from extractor.text_extractor import extract_text, UnsupportedFileTypeError
 from analyzer.text_analyzer import TextAnalyzer
-from extractor.financial_extractor import extract_all_financial_data  # corrected import name
+from extractor.financial_extractor import extract_all_financial_data
 
 
 def print_header():
@@ -14,6 +15,39 @@ def prompt_file_path() -> str:
     if not file_path:
         raise ValueError("⚠️  File path cannot be empty.")
     return file_path
+
+
+def display_financial_data(data: dict):
+    print("\n💰 Extracted Financial Data:")
+
+    full_name = data.get("full_name")
+    print(f" - Full Name: {full_name if full_name else 'Not found'}")
+
+    phones = data.get("phone_numbers")
+    print(f" - Phone Number(s): {', '.join(phones) if phones else 'Not found'}")
+
+    nida = data.get("nida_number")
+    print(f" - NIDA Number: {nida if nida else 'Not found'}")
+
+    age = data.get("age")
+    print(f" - Age: {age if age is not None else 'Not found'}")
+
+    location = data.get("location")
+    if location:
+        print("\n📍 Location Information:")
+        for level in ["region", "district", "ward"]:
+            val = location.get(level)
+            if val:
+                print(f"  {level.capitalize()}: {val}")
+
+    income = data.get("income_tzs")
+    print(f" - Income (TZS): {income:,.0f}" if income is not None else " - Income (TZS): Not found")
+
+    balance = data.get("bank_balance_tzs")
+    print(f" - Bank Balance (TZS): {balance:,.0f}" if balance is not None else " - Bank Balance (TZS): Not found")
+
+    loan_limit = data.get("loan_limit_tzs")
+    print(f" - Loan Limit (TZS): {loan_limit:,.0f}" if loan_limit is not None else " - Loan Limit (TZS): Not found")
 
 
 def main():
@@ -30,22 +64,19 @@ def main():
 
         print("✅ Extraction successful! Here's a preview:\n")
         print("-" * 60)
-        print(text[:500].strip())  # Show first 500 characters
+        print(text[:500].strip())
         print("-" * 60)
 
-        # Extract structured financial data
         data = extract_all_financial_data(text)
 
+        # If you want to handle email extraction and it's not implemented in extractor,
+        # just note here:
         if data.get("email") is None:
-            print("⚠️ Email not found; many Tanzanians may not have one.")
+            print("\n⚠️ Email not found; many Tanzanians may not have one.")
         else:
-            print(f"Email: {data['email']}")
+            print(f"\nEmail: {data['email']}")
 
-        print(f"Phone: {data.get('phone', 'N/A')}")
-        print(f"NIDA Number: {data.get('nida_number', 'N/A')}")
-        print(f"Age: {data.get('age', 'N/A')}")
-        print(f"Income: {data.get('income', 'N/A')}")
-        print(f"Location: {data.get('location', 'N/A')}")
+        display_financial_data(data)
 
         print("\n🔎 Analyzing text...\n")
         analyzer = TextAnalyzer()

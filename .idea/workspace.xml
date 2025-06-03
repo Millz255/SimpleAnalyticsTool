@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fadb97c8-cce9-4b92-a200-d72e3b5d6f52" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/analyzer/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extractor/financial_extractor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analyzer/text_analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer/text_analyzer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extractor/financial_extractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/extractor/financial_extractor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
