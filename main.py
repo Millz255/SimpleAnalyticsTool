@@ -1,4 +1,6 @@
 import os
+import traceback
+
 from extractor.text_extractor import extract_text, UnsupportedFileTypeError
 from analyzer.text_analyzer import TextAnalyzer
 from extractor.financial_extractor import extract_all_financial_data
@@ -105,7 +107,10 @@ def main():
         print(f"⚠️  {ve}")
     except Exception as e:
         print(f"❌ Unexpected error occurred: {e}")
+        traceback.print_exc()
+        input("\nPress Enter to exit...")
 
 
 if __name__ == "__main__":
     main()
+    input("\nPress Enter to exit...")

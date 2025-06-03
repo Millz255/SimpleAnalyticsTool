@@ -1,114 +1,107 @@
 import re
 import json
+import os
+import sys
 from typing import Optional, Dict, Any
 
-with open('app/data/tanzania_locations.json', 'r', encoding='utf-8') as f:
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
+with open(resource_path('app/data/tanzania_locations.json'), 'r', encoding='utf-8') as f:
     TANZANIA_LOCATIONS = json.load(f)
 
+
 def extract_full_name(text: str) -> Optional[str]:
-    lines = text.split('\n')
-    for line in lines:
-        line = line.strip()
-        if not line:
-            continue
-
-        if re.match(r'^([A-Z][a-z]+(?:\s[A-Z][a-z]+){1,2})$', line):
-            return line
-
-        if line.isupper() and 2 <= len(line.split()) <= 4:
-            return line.title()
+    # Look for common name introductions
+    patterns = [
+        r"([A-Z][a-z]+(?:\s[A-Z][a-z]+){1,2}) is (?:a|an)",  # e.g. "John Doe is a..."
+        r"My name is ([A-Z][a-z]+(?:\s[A-Z][a-z]+){1,2})",
+        r"Name[:\s]*([A-Z][a-z]+(?:\s[A-Z][a-z]+){1,2})"
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if match:
+            return match.group(1).strip()
     return None
+
 
 def extract_phone_numbers(text: str) -> Optional[list]:
     pattern = re.compile(r'(\+255|0)(7|6|5|4|2)\d{7,8}')
-    phones = pattern.findall(text)
-    if phones:
-        phones_full = [m.group() for m in pattern.finditer(text)]
-        return list(set(phones_full))
-    return None
+    return list(set([m.group() for m in pattern.finditer(text)]))
+
 
 def extract_nida_number(text: str) -> Optional[str]:
-    pattern = re.compile(r'(?:NIDA\s*Number[:\s]*)?([A-Z]?\d{15,16})', re.IGNORECASE)
-    matches = pattern.findall(text)
-    for match in matches:
-        candidate = match.replace(' ', '').replace('-', '')
-        if len(candidate) in (16, 17):
-            return candidate.upper()
+    pattern = re.compile(r'(?:NIDA\s*Number[:\s]*)?([A-Z]?\d{15,17})', re.IGNORECASE)
+    for match in pattern.findall(text):
+        cleaned = match.replace(' ', '').replace('-', '')
+        if len(cleaned) in (16, 17):
+            return cleaned.upper()
     return None
+
 
 def extract_age(text: str) -> Optional[int]:
-    age_pattern = re.compile(r'Age[:\s]+(\d{1,2})')
-    dob_pattern = re.compile(r'Date of Birth[:\s]+(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})', re.IGNORECASE)
-    year_pattern = re.compile(r'Born[:\s]+(\d{4})', re.IGNORECASE)
-
-    age_match = age_pattern.search(text)
+    age_match = re.search(r'Age[:\s]+(\d{1,2})', text)
     if age_match:
-        try:
-            age = int(age_match.group(1))
-            if 0 < age < 120:
-                return age
-        except ValueError:
-            pass
+        return int(age_match.group(1))
 
-    dob_match = dob_pattern.search(text)
-    if dob_match:
-        dob_str = dob_match.group(1)
-        year_match = re.search(r'\d{4}', dob_str)
-        if year_match:
-            birth_year = int(year_match.group(0))
-            from datetime import datetime
-            current_year = datetime.now().year
-            age = current_year - birth_year
-            if 0 < age < 120:
-                return age
-
-    year_match = year_pattern.search(text)
-    if year_match:
-        birth_year = int(year_match.group(1))
+    birth_match = re.search(r'Born(?: in)?[:\s]*(\d{4})', text, re.IGNORECASE)
+    if birth_match:
         from datetime import datetime
-        current_year = datetime.now().year
-        age = current_year - birth_year
+        birth_year = int(birth_match.group(1))
+        age = datetime.now().year - birth_year
         if 0 < age < 120:
             return age
-
     return None
+
 
 def extract_income(text: str) -> Optional[float]:
-    pattern = re.compile(r'Income[:\s]*([\d,]+)', re.IGNORECASE)
-    match = pattern.search(text)
-    if match:
-        num_str = match.group(1).replace(',', '')
-        try:
-            return float(num_str)
-        except ValueError:
-            pass
+    patterns = [
+        r'income of\s*([\d,]+)',
+        r'earns\s*an\s*income\s*of\s*([\d,]+)',
+        r'Income[:\s]*([\d,]+)'
+    ]
+    for pat in patterns:
+        match = re.search(pat, text, re.IGNORECASE)
+        if match:
+            try:
+                return float(match.group(1).replace(',', ''))
+            except ValueError:
+                continue
     return None
+
 
 def extract_bank_balance(text: str) -> Optional[float]:
     pattern = re.compile(r'(?:Bank\s*Balance|Balance)[:\s]*([\d,]+)', re.IGNORECASE)
     match = pattern.search(text)
     if match:
-        num_str = match.group(1).replace(',', '')
-        try:
-            return float(num_str)
-        except ValueError:
-            pass
+        return float(match.group(1).replace(',', ''))
     return None
 
+
 def extract_loan_limit(text: str) -> Optional[float]:
-    pattern = re.compile(r'(?:Loan\s*limit|Borrowing\s*limit)[:\s]*([\d,]+)', re.IGNORECASE)
-    match = pattern.search(text)
-    if match:
-        num_str = match.group(1).replace(',', '')
-        try:
-            return float(num_str)
-        except ValueError:
-            pass
+    patterns = [
+        r'loan limit of\s*([\d,]+)',
+        r'applied for (?:a )?loan.*?([\d,]+)',
+        r'(?:Loan\s*limit|Borrowing\s*limit)[:\s]*([\d,]+)'
+    ]
+    for pat in patterns:
+        match = re.search(pat, text, re.IGNORECASE)
+        if match:
+            try:
+                return float(match.group(1).replace(',', ''))
+            except ValueError:
+                continue
     return None
+
 
 def extract_location(text: str) -> Dict[str, Optional[str]]:
     text_lower = text.lower()
-
     for region, districts in TANZANIA_LOCATIONS.items():
         if region.lower() in text_lower:
             for district, wards in districts.items():
@@ -118,47 +111,35 @@ def extract_location(text: str) -> Dict[str, Optional[str]]:
                             return {"region": region, "district": district, "ward": ward}
                     return {"region": region, "district": district, "ward": None}
             return {"region": region, "district": None, "ward": None}
-
     return {"region": None, "district": None, "ward": None}
 
+
 def extract_job_and_work(text: str) -> Dict[str, Optional[str]]:
-    # Keywords for job titles - extend as needed
     job_keywords = [
         "software developer", "engineer", "teacher", "manager", "consultant",
         "accountant", "driver", "nurse", "farmer", "mechanic", "worker",
-        "job", "work", "developer", "technician", "officer", "supervisor",
-        "assistant", "clerk", "operator", "analyst"
+        "developer", "technician", "officer", "supervisor", "assistant",
+        "clerk", "operator", "analyst", "security", "doctor"
     ]
     job_pattern = re.compile(r'\b(' + '|'.join(job_keywords) + r')\b', re.IGNORECASE)
+    job_match = job_pattern.search(text)
+    job_title = job_match.group(1).title() if job_match else None
 
-    job_matches = job_pattern.findall(text)
-    job_title = job_matches[0].title() if job_matches else None
-
-    # Patterns to extract workplace/company/organization
-    workplace = None
     workplace_patterns = [
-        re.compile(r'works at ([A-Z][\w&\s\-]+)', re.IGNORECASE),
-        re.compile(r'employed by ([A-Z][\w&\s\-]+)', re.IGNORECASE),
-        re.compile(r'working at ([A-Z][\w&\s\-]+)', re.IGNORECASE),
-        re.compile(r'employee of ([A-Z][\w&\s\-]+)', re.IGNORECASE),
+        r'works at ([A-Z][\w&\s\-]+)',
+        r'employed by ([A-Z][\w&\s\-]+)',
+        r'working at ([A-Z][\w&\s\-]+)',
+        r'employee of ([A-Z][\w&\s\-]+)',
     ]
-    for pat in workplace_patterns:
-        m = pat.search(text)
-        if m:
-            workplace = m.group(1).strip()
-            break
+    for pattern in workplace_patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            return {"job_title": job_title, "workplace": match.group(1).strip()}
+    return {"job_title": job_title, "workplace": None}
 
-    return {
-        "job_title": job_title,
-        "workplace": workplace,
-    }
 
 def extract_all_financial_data(text: str) -> Dict[str, Any]:
-    """
-    Extract all relevant financial data from text into a structured dictionary,
-    including job and workplace info.
-    """
-    data = {
+    return {
         "full_name": extract_full_name(text),
         "phone_numbers": extract_phone_numbers(text),
         "nida_number": extract_nida_number(text),
@@ -167,9 +148,5 @@ def extract_all_financial_data(text: str) -> Dict[str, Any]:
         "income_tzs": extract_income(text),
         "bank_balance_tzs": extract_bank_balance(text),
         "loan_limit_tzs": extract_loan_limit(text),
+        **extract_job_and_work(text),
     }
-
-    job_data = extract_job_and_work(text)
-    data.update(job_data)
-
-    return data
