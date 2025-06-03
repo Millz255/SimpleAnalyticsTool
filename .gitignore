@@ -1,0 +1,26 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# Python virtual environment
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.pyz
+*.spec
+*.exe
+*.pkg
+
+# PyInstaller/CX_Freeze
+*.manifest
+*.dll
+*.pyd
+*.so
