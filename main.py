@@ -1,4 +1,5 @@
 import os
+import sys
 import traceback
 import time
 from datetime import datetime
@@ -10,6 +11,15 @@ from analyzer.text_analyzer import TextAnalyzer
 from extractor.financial_extractor import extract_all_financial_data
 
 
+def safe_input(prompt=""):
+    """Cross-platform input that works even when redirected"""
+    try:
+        return input(prompt)
+    except EOFError:
+        print("\n" + prompt, end="")
+        return sys.stdin.readline().strip()
+
+
 def print_header():
     print("=" * 60)
     print("🧠  Simple Analytics Tool".center(60))
@@ -17,7 +27,7 @@ def print_header():
 
 
 def prompt_file_path() -> str:
-    file_path = input("📄 Enter the full path to your document (.txt, .pdf, .docx): ").strip()
+    file_path = safe_input("📄 Enter the full path to your document (.txt, .pdf, .docx): ").strip()
     if not file_path:
         raise ValueError("⚠️  File path cannot be empty.")
     if not os.path.isfile(file_path):
@@ -126,9 +136,9 @@ def generate_pdf_report(file_path: str, extracted_data: dict, analysis: dict):
 
 
 def main():
-    print_header()
-
     try:
+        print_header()
+
         file_path = prompt_file_path()
         print("\n🔍 Extracting text...\n")
         text = extract_text(file_path)
@@ -144,7 +154,6 @@ def main():
 
         data = extract_all_financial_data(text)
 
-        # Handle email if extracted, otherwise notify
         email = data.get("email")
         if email:
             print(f"\n📧 Email: {email}")
@@ -170,7 +179,6 @@ def main():
         else:
             print("No named entities found.")
 
-        # Generate the PDF
         generate_pdf_report(file_path, data, analysis)
 
     except FileNotFoundError as fnf:
@@ -179,15 +187,25 @@ def main():
         print(str(uft))
     except ValueError as ve:
         print(f"⚠️  {ve}")
-
     except Exception as e:
         with open("error_log.txt", "w") as f:
             f.write(f"❌ Unexpected error occurred: {e}\n")
             traceback.print_exc(file=f)
         print("❌ Unexpected error occurred. Check 'error_log.txt' for details.")
-        time.sleep(20)
+        print(f"Error details: {str(e)}")
+        traceback.print_exc()
+    finally:
+        # Triple protection to keep window open
+        safe_input("\nPress Enter to exit...")
+        time.sleep(2)  # Additional delay
+        os.system("pause")  # Final fallback
 
-    input("\nPress Enter to exit...")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"CRITICAL ERROR: {str(e)}")
+        traceback.print_exc()
+        safe_input("Press Enter to exit (critical error)...")
+        time.sleep(5)
