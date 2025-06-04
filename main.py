@@ -1,5 +1,6 @@
 import os
 import traceback
+import time
 from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -178,12 +179,13 @@ def main():
         print(str(uft))
     except ValueError as ve:
         print(f"⚠️  {ve}")
-    except Exception as e:
-        print(f"❌ Unexpected error occurred: {e}")
-        traceback.print_exc()
-        input("\nPress Enter to exit...")
 
-    input("\nPress Enter to exit...")
+    except Exception as e:
+        with open("error_log.txt", "w") as f:
+            f.write(f"❌ Unexpected error occurred: {e}\n")
+            traceback.print_exc(file=f)
+        print("❌ Unexpected error occurred. Check 'error_log.txt' for details.")
+        time.sleep(20)
 
 
 if __name__ == "__main__":
