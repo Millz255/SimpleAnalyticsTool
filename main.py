@@ -1,5 +1,8 @@
 import os
 import traceback
+from datetime import datetime
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 
 from extractor.text_extractor import extract_text, UnsupportedFileTypeError
 from analyzer.text_analyzer import TextAnalyzer
@@ -54,6 +57,73 @@ def display_financial_data(data: dict):
     print(f" - Loan Limit (TZS): {loan_limit:,.0f}" if loan_limit is not None else " - Loan Limit (TZS): Not found")
 
 
+def generate_pdf_report(file_path: str, extracted_data: dict, analysis: dict):
+    pdf_path = "analysis_report.pdf"
+    c = canvas.Canvas(pdf_path, pagesize=A4)
+    width, height = A4
+    x_margin, y_margin = 40, 50
+    y = height - y_margin
+
+    def draw_line(text, offset=14, font="Helvetica", size=10):
+        nonlocal y
+        if y < y_margin:
+            c.showPage()
+            y = height - y_margin
+        c.setFont(font, size)
+        c.drawString(x_margin, y, text)
+        y -= offset
+
+    draw_line("📄 Document Analysis Report", offset=20, font="Helvetica-Bold", size=14)
+    draw_line(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    draw_line(f"Source File: {os.path.basename(file_path)}")
+    draw_line("")
+
+    draw_line("💰 Financial Data Extracted:", font="Helvetica-Bold")
+    draw_line(f"- Full Name: {extracted_data.get('full_name', 'Not found')}")
+    phones = extracted_data.get("phone_numbers", [])
+    draw_line(f"- Phone Number(s): {', '.join(phones) if phones else 'Not found'}")
+    draw_line(f"- NIDA Number: {extracted_data.get('nida_number', 'Not found')}")
+    draw_line(f"- Age: {extracted_data.get('age', 'Not found')}")
+    loc = extracted_data.get("location", {})
+    for level in ["region", "district", "ward"]:
+        val = loc.get(level)
+        if val:
+            draw_line(f"- {level.capitalize()}: {val}")
+    draw_line(f"- Income (TZS): {extracted_data.get('income_tzs', 'Not found')}")
+    draw_line(f"- Bank Balance (TZS): {extracted_data.get('bank_balance_tzs', 'Not found')}")
+    draw_line(f"- Loan Limit (TZS): {extracted_data.get('loan_limit_tzs', 'Not found')}")
+
+    draw_line("")
+    draw_line("📧 Email: " + extracted_data.get("email", "Not found"))
+
+    draw_line("")
+    draw_line("📝 Summary:", font="Helvetica-Bold")
+    summary = analysis.get("summary", "No summary available.")
+    for line in summary.split("\n"):
+        draw_line(line)
+
+    draw_line("")
+    draw_line("🔑 Key Phrases:", font="Helvetica-Bold")
+    key_phrases = analysis.get("key_phrases", [])
+    if key_phrases:
+        for phrase in key_phrases:
+            draw_line(f"• {phrase}")
+    else:
+        draw_line("No key phrases found.")
+
+    draw_line("")
+    draw_line("🧩 Named Entities:", font="Helvetica-Bold")
+    named_entities = analysis.get("named_entities", [])
+    if named_entities:
+        for ent in named_entities:
+            draw_line(f"• {ent['text']} [{ent['label']}]")
+    else:
+        draw_line("No named entities found.")
+
+    c.save()
+    print(f"\n📁 PDF report generated: {pdf_path}")
+
+
 def main():
     print_header()
 
@@ -99,6 +169,9 @@ def main():
         else:
             print("No named entities found.")
 
+        # Generate the PDF
+        generate_pdf_report(file_path, data, analysis)
+
     except FileNotFoundError as fnf:
         print(str(fnf))
     except UnsupportedFileTypeError as uft:
@@ -110,7 +183,8 @@ def main():
         traceback.print_exc()
         input("\nPress Enter to exit...")
 
+    input("\nPress Enter to exit...")
+
 
 if __name__ == "__main__":
     main()
-    input("\nPress Enter to exit...")
