@@ -187,6 +187,7 @@ def main():
         print("❌ Unexpected error occurred. Check 'error_log.txt' for details.")
         time.sleep(20)
 
+    input("\nPress Enter to exit...")
 
 if __name__ == "__main__":
     main()
