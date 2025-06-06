@@ -23,7 +23,7 @@ missing module named pathlib._make_selector - imported by pathlib (conditional),
 missing module named pathlib._posix_flavour - imported by pathlib (conditional), cloudpathlib.cloudpath (conditional)
 missing module named grp - imported by shutil (delayed, optional), tarfile (optional), pathlib._local (optional), subprocess (delayed, conditional, optional), setuptools._vendor.backports.tarfile (optional), setuptools._distutils.archive_util (optional)
 missing module named pwd - imported by posixpath (delayed, conditional, optional), shutil (delayed, optional), tarfile (optional), pathlib._local (optional), subprocess (delayed, conditional, optional), http.server (delayed, optional), netrc (delayed, conditional), getpass (delayed, optional), setuptools._distutils.util (delayed, conditional, optional), setuptools._vendor.backports.tarfile (optional), setuptools._distutils.archive_util (optional)
-missing module named posix - imported by posixpath (optional), shutil (conditional), importlib._bootstrap_external (conditional), os (conditional, optional), _pyrepl.unix_console (delayed, optional)
+missing module named posix - imported by os (conditional, optional), posixpath (optional), shutil (conditional), importlib._bootstrap_external (conditional), _pyrepl.unix_console (delayed, optional)
 missing module named resource - imported by posix (top-level)
 missing module named _posixsubprocess - imported by subprocess (conditional), multiprocessing.util (delayed)
 missing module named fcntl - imported by subprocess (optional), pty (delayed, optional), tqdm.utils (delayed, optional), _pyrepl.unix_console (top-level)
