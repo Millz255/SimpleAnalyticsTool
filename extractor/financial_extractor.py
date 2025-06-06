@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any
 
 
 def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
+    """Get absolute path to resource, works for dev and for PyInstaller"""
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
@@ -15,13 +15,13 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-# Load location data
+# Load Tanzania locations data
 try:
     with open(resource_path('app/data/tanzania_locations.json'), 'r', encoding='utf-8') as f:
-        LOCATION_DATA = json.load(f)
-except FileNotFoundError as e:
-    print(f"Error loading location data: {e}")
-    LOCATION_DATA = {}
+        TANZANIA_LOCATIONS = json.load(f)
+except FileNotFoundError:
+    print("Warning: Could not load Tanzania locations data")
+    TANZANIA_LOCATIONS = {"regions": {}}
 
 
 def extract_full_name(text: str) -> Optional[str]:
