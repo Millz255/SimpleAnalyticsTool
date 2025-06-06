@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('app/data/tanzania_locations.json', 'app/data')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

@@ -15,9 +15,13 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-
-with open(resource_path('app/data/tanzania_locations.json'), 'r', encoding='utf-8') as f:
-    TANZANIA_LOCATIONS = json.load(f)
+# Load location data
+try:
+    with open(resource_path('app/data/tanzania_locations.json'), 'r', encoding='utf-8') as f:
+        LOCATION_DATA = json.load(f)
+except FileNotFoundError as e:
+    print(f"Error loading location data: {e}")
+    LOCATION_DATA = {}
 
 
 def extract_full_name(text: str) -> Optional[str]:
